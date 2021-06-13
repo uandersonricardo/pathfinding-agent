@@ -6,6 +6,7 @@ class Vehicle():
         self.r = 6
         self.maxspeed = 4
         self.maxforce = 0.2
+        self.score = 0
 
     # Method to update location
     def update(self):
@@ -20,6 +21,9 @@ class Vehicle():
     def applyForce(self, force):
         # We could add mass here if we want A = F / M
         self.acceleration.add(force)
+        
+    def scored(self):
+        self.score += 1
 
     # A method that calculates a steering force towards a target
     # STEER = DESIRED MINUS VELOCITY
@@ -56,6 +60,10 @@ class Vehicle():
             vertex(-self.r, self.r * 2)
             vertex(self.r, self.r * 2)
             endShape(CLOSE)
+            
+        fill(255)
+        textSize(14)
+        text(str(self.score), self.position.x + self.r * 2 + 3, self.position.y + self.r * 2 + 4)
         
     def isColliding(self, P):
         theta = self.velocity.heading() + PI / 2
@@ -68,11 +76,6 @@ class Vehicle():
         B.add(self.position)
         C.rotate(theta)
         C.add(self.position)
-        
-        stroke(255, 0, 0)
-        line(A.x, A.y, B.x, B.y)
-        line(B.x, B.y, C.x, C.y)
-        line(A.x, A.y, C.x, C.y)
            
         v0 = PVector.sub(C, A)
         v1 = PVector.sub(B, A)

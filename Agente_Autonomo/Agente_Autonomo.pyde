@@ -1,19 +1,26 @@
 from Vehicle import Vehicle
 from Food import Food
 
+position = PVector(0, 0)
+
 def setup():
     global v
     global f
+    global position
     size(640, 360)
+    
     v = Vehicle(width / 2, height / 2)
-    f = Food(600, height / 2)
+    
+    position = PVector(random(0, 640), random(0, 360))
+    f = Food(position.x, position.y)
 
 def draw():
+    global position
+    global f
+    
     background(51)
-
-    mouse = PVector(mouseX, mouseY)
-
-    v.arrive(mouse)
+    
+    v.arrive(position)
     
     f.update()
     f.display()
@@ -21,4 +28,7 @@ def draw():
     v.update()
     v.display()
     
-    print(v.isColliding(PVector(600 + 3, height / 2 + 3)))
+    if (v.isColliding(position)):
+        position = PVector(random(0, 640), random(0, 360))
+        f = Food(position.x, position.y)
+        v.scored()

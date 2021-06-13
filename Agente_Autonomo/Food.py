@@ -29,7 +29,7 @@ class Food():
         noStroke()
         strokeWeight(1)
         with pushMatrix():
-            translate(self.position.x, self.position.y)
+            translate(self.position.x - self.r / 2, self.position.y - self.r / 2)
             rotate(theta)
             rect(0, 0, self.r, self.r)
             # beginShape()
