@@ -1,56 +1,46 @@
 class Vehicle():
     def __init__(self, x, y):
         self.acceleration = PVector(0, 0)
-        self.velocity = PVector(0, -2)
+        self.velocity = PVector(0, 0)
         self.position = PVector(x, y)
-        self.r = 6
-        self.maxspeed = 4
-        self.maxforce = 0.2
+        self.r = 3
+        self.maxspeed = 10
+        self.maxforce = 10
         self.score = 0
 
-    # Method to update location
     def update(self):
-        # Update velocity
         self.velocity.add(self.acceleration)
-        # Limit speed
         self.velocity.limit(self.maxspeed)
         self.position.add(self.velocity)
-        # Reset accelerationelertion to 0 each cycle
         self.acceleration.mult(0)
 
     def applyForce(self, force):
-        # We could add mass here if we want A = F / M
         self.acceleration.add(force)
         
     def scored(self):
         self.score += 1
 
-    # A method that calculates a steering force towards a target
-    # STEER = DESIRED MINUS VELOCITY
-    def arrive(self, target):
-
-        # A vector pointing from the location to the target
+    def arrive(self, target, speed):
+        self.maxspeed = speed
+        
         desired = target - self.position
         d = desired.mag()
 
-        # Scale with arbitrary damping within 100 pixels
         if (d < 100):
             m = map(d, 0, 100, 0, self.maxspeed)
             desired.setMag(m)
         else:
             desired.setMag(self.maxspeed)
 
-        # Steering = Desired minus velocity
         steer = desired - self.velocity
-        steer.limit(self.maxforce)  # Limit to maximum steering force
+        steer.limit(self.maxforce)
 
         self.applyForce(steer)
 
     def display(self):
-        # Draw a triangle rotated in the direction of velocity
         theta = self.velocity.heading() + PI / 2
-        fill(127)
-        stroke(200)
+        fill(255, 0, 0)
+        stroke(255, 0, 0)
         strokeWeight(1)
         with pushMatrix():
             translate(self.position.x, self.position.y)
@@ -63,7 +53,7 @@ class Vehicle():
             
         fill(255)
         textSize(14)
-        text(str(self.score), self.position.x + self.r * 2 + 3, self.position.y + self.r * 2 + 4)
+        text(str(self.score), self.position.x + self.r * 2 + 6, self.position.y + self.r * 2 + 6)
         
     def isColliding(self, P):
         theta = self.velocity.heading() + PI / 2

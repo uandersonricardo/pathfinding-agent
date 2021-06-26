@@ -1,5 +1,4 @@
 class Food():
-
     def __init__(self, x, y):
         self.acceleration = PVector(0, 0)
         self.velocity = PVector(0, 0)
@@ -7,33 +6,40 @@ class Food():
         self.r = 6
         self.maxspeed = 1.0
         self.maxforce = 0.01
+        self.opacity = 255
+        self.bg = 0
 
-    # Method to update location
     def update(self):
-        # Update velocity
         self.velocity.add(self.acceleration)
-        # Limit speed
         self.velocity.limit(self.maxspeed)
         self.position.add(self.velocity)
-        # Reset accelerationelertion to 0 each cycle
         self.acceleration.mult(0)
 
     def applyForce(self, force):
-        # We could add mass here if we want A = F / M
         self.acceleration.add(force)
 
     def display(self):
-        # Draw a triangle rotated in the direction of velocity
-        theta = self.velocity.heading()# + PI / 2
-        fill(127)
+        theta = self.velocity.heading()
+        
+        if self.opacity <= 80:
+            self.opacity = 255
+            self.bg = (self.bg + 1) % 5
+        else:
+            self.opacity = self.opacity - 12
+        
+        if (self.bg == 0):
+            fill(255, 0, 255, self.opacity)
+        elif (self.bg == 1):
+            fill(255, 255, 0, self.opacity)
+        elif (self.bg == 2):
+            fill(255, 0, 0, self.opacity)
+        elif (self.bg == 3):
+            fill(0, 255, 0, self.opacity)
+        elif (self.bg == 4):
+            fill(0, 0, 255, self.opacity)
+            
         noStroke()
-        strokeWeight(1)
         with pushMatrix():
             translate(self.position.x - self.r / 2, self.position.y - self.r / 2)
             rotate(theta)
             rect(0, 0, self.r, self.r)
-            # beginShape()
-            # vertex(0, -self.r * 2)
-            # vertex(-self.r, self.r * 2)
-            # vertex(self.r, self.r * 2)
-            # endShape(CLOSE)
